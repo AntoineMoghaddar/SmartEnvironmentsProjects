@@ -1,13 +1,13 @@
-const int ledPin = 13;
-const int buzzerPin = 12;
+const int ledRed = 13;
+const int ledYellow = 9;
 const int ldrPin = A0;
 const int ldrPin2 = A1;
 
 
 void setup() {
   Serial.begin(9600);
-  pinMode(ledPin, OUTPUT);
-  pinMode(buzzerPin, OUTPUT);
+  pinMode(ledRed, OUTPUT);
+  pinMode(ledYellow, OUTPUT);
   pinMode(ldrPin, INPUT);
   pinMode(ldrPin2, INPUT);
 }
@@ -17,27 +17,38 @@ void loop() {
   boolean value2;
   int ldrStatus = analogRead(ldrPin);
   int ldrStatus2 = analogRead(ldrPin2);
-  //Serial.println(ldrStatus2);
-  //Serial.println(ldrStatus);
-  if (ldrStatus <= 500) {
+
+  //determining if there is something over the LDR
+  if (ldrStatus <= 650) {
     value1 = 1;
   } else {
     value1 = 0;
   }
 
-  if (ldrStatus2 <= 500) {
+  if (ldrStatus2 <= 650) {
     value2 = 1;
   } else {
     value2 = 0;
   }
 
-  int valueTot = value1 + value2;
+  //transmitting values
+  Serial.print("A");
+  Serial.println(value1);
+  Serial.print("B");
+  Serial.println(value2);
 
-  Serial.println('A1 ' + value1);
-  Serial.println('A2 ' + value2);
-//  if (valueTot == 2) {
-//    digitalWrite(ledPin, HIGH);
-//  } else {
-//    digitalWrite(ledPin, LOW);
-//  }
+  //receiving values and 
+  if (Serial.available() > 0) {
+    int incomingByte = Serial.read();
+    if (incomingByte == 2) {
+      digitalWrite(ledRed, HIGH);
+      digitalWrite(ledYellow, HIGH);
+    } else if(incomingByte == 1){
+      digitalWrite(ledRed, HIGH);
+      digitalWrite(ledYellow, LOW);
+    } else { //when incomingByte == 0
+      digitalWrite(ledRed, LOW);
+      digitalWrite(ledYellow, HIGH);
+      }
+  }
 }

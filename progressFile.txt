@@ -1,0 +1,13 @@
+14-1-2019, 18:00
+	Arduino pakt de waarde van 2 LDRs, zet deze om naar 0 of 1 en geeft ze door aan processing.
+	Processing pakt deze waardes en berekent de totale waarde.
+	Processing geeft deze waarde door aan Arduino.
+	Arduino laat op basis van deze waarde 1 of 2 ledjes branden.
+
+	Toegevoegd aan schakeling:
+	- 1 led (geel) op poort 9
+	
+	Probleem wat ik had was dat de ene LDR de waarde van de andere beïnvloedde.
+	Wanneer de value van de LDR op A1 0 werd, werd de value van de LDR op A0 ook 0.
+	Wanneer de value van de LDR op A1 1 werd, werd de value van de LDR op A0 ook 1.
+	De LDR op A0 afdekken had geen invloed op zijn value.
