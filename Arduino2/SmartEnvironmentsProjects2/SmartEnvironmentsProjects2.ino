@@ -1,13 +1,9 @@
-const int ledRed = 13;
-const int ledYellow = 9;
 const int ldrPin = A0;
 const int ldrPin2 = A1;
 
 
 void setup() {
   Serial.begin(9600);
-  pinMode(ledRed, OUTPUT);
-  pinMode(ledYellow, OUTPUT);
   pinMode(ldrPin, INPUT);
   pinMode(ldrPin2, INPUT);
 }
@@ -19,7 +15,7 @@ void loop() {
   int ldrStatus2 = analogRead(ldrPin2);
 
   //determining if there is something over the LDR
-  if (ldrStatus <= 650) {
+  if (ldrStatus <= 600) {
     value1 = 1;
   } else {
     value1 = 0;
@@ -36,19 +32,5 @@ void loop() {
   Serial.println(value1);
   Serial.print("B");
   Serial.println(value2);
-
-  //receiving values and 
-  if (Serial.available() > 0) {
-    int incomingByte = Serial.read();
-    if (incomingByte == 2) {
-      digitalWrite(ledRed, HIGH);
-      digitalWrite(ledYellow, HIGH);
-    } else if(incomingByte == 1){
-      digitalWrite(ledRed, HIGH);
-      digitalWrite(ledYellow, LOW);
-    } else { //when incomingByte == 0
-      digitalWrite(ledRed, LOW);
-      digitalWrite(ledYellow, HIGH);
-      }
-  }
+  delay(50);
 }
