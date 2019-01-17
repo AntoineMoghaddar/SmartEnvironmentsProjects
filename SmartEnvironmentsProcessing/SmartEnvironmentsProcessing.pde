@@ -25,7 +25,7 @@ void setup() {
 }
 
 void draw() {
-  int junction;
+  String junction;
   while (portRight.available() > 0) {
     serialEvent(portRight.read(), 0);
   }
@@ -44,10 +44,13 @@ void draw() {
   }
 
   if (valueTotRight < valueTotLeft) {
-    junction = 1;
+    junction = "LEFT";
   } else {
-    junction = 0;
+    junction = "RIGHT";
   }
+  println("TotalValueRight" + valueTotRight);
+  println("TotalValueLeft" + valueTotLeft);
+  println(junction);
   portLeft.write(junction);
 }
 
@@ -55,8 +58,6 @@ void draw() {
 //Nils Rugers, assignment makingMove
 void serialEvent(int serial, int junctionValue) {
   try {    // try-catch because of transmission errors
-      print("<<DEBUG>> Reached serial with serial value: " + serial);
-
     if (serial != NEWLINE) { 
       buff += char(serial); //add value of port.read to the buff
     } else {
@@ -67,34 +68,23 @@ void serialEvent(int serial, int junctionValue) {
       // Discard the carriage return at the end of the buffer
       buff = buff.substring(0, buff.length()-1);
       // Parse the String into an integer
-      print("<<DEBUG>> Reached end buff with buff value: " + buff);
       if (junctionValue == 1) {
-
-        println("<<DEBUG>> Reached if Statement with value: " + junctionValue
-          + "\nValue of Buff: " + buff);
         for (int z=0; z<2; z++) {
-          //if (c == header[z]) {
-          println("<<DEBUG>> Value of Z: " + z 
-            + "\nValue of buff: " + Integer.parseInt(buff));
-          valueLeft[z] = Integer.parseInt(buff);
-          //}
+          if (c == header[z]) {
+            valueLeft[z] = Integer.parseInt(buff);
+          }
         }
       } else {
-        println("<<DEBUG>> Reached Else Statement : " + junctionValue
-          + "\nValue of Buff: " + buff);
-
         for (int z=0; z<2; z++) {
-          // if (c == header[z]) {
-          println("<<DEBUG>> Value of Z: " + z 
-            + "\n buff: " + Integer.parseInt(buff));
+          if (c == header[z]) {
           valueRight[z] = Integer.parseInt(buff);
-          // }
+          }
         }
-      }
+      }    
+      buff = "";
     }
-    buff = "";
   }
   catch(Exception e) {
-    e.printStackTrace();
+    //e.printStackTrace();
   }
 }
