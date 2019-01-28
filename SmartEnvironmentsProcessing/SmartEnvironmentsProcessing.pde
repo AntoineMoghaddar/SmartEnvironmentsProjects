@@ -4,11 +4,11 @@ Serial portLeft;    //comm port left junction
 Serial portRight;   // comm port right junction
 Serial portLights;  // comm port alternating lights
 
-int valueRight[] = new int[2];
-int valueLeft[] = new int[2];
+int valueRight[] = new int[3];
+int valueLeft[] = new int[3];
 String buff = "";
 int NEWLINE = 10;
-char header[] = {'A', 'B'};
+char header[] = {'A', 'B', 'C'};
 
 void setup() {
   size(400, 400);
@@ -43,10 +43,10 @@ void draw() {
     valueTotLeft += valueLeft[i];
   }
 
-  if (valueTotRight < valueTotLeft) {
-    junction = "LEFT";
+  if (valueTotRight > valueTotLeft) {
+    junction = "L";
   } else {
-    junction = "RIGHT";
+    junction = "R";
   }
   println("TotalValueRight" + valueTotRight);
   println("TotalValueLeft" + valueTotLeft);
@@ -69,13 +69,13 @@ void serialEvent(int serial, int junctionValue) {
       buff = buff.substring(0, buff.length()-1);
       // Parse the String into an integer
       if (junctionValue == 1) {
-        for (int z=0; z<2; z++) {
+        for (int z=0; z<3; z++) {
           if (c == header[z]) {
             valueLeft[z] = Integer.parseInt(buff);
           }
         }
       } else {
-        for (int z=0; z<2; z++) {
+        for (int z=0; z<3; z++) {
           if (c == header[z]) {
           valueRight[z] = Integer.parseInt(buff);
           }
