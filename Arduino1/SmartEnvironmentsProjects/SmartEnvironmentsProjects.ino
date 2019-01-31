@@ -1,14 +1,13 @@
-const int ledRed = 8;
-const int ledYellow = 9;
+const int ledStraight = 8;
+const int ledRight = 7;
 const int ldrPin1 = A0;
 const int ldrPin2 = A1;
 const int ldrPin3 = A2;
-int junction;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(ledRed, OUTPUT);
-  pinMode(ledYellow, OUTPUT);
+  pinMode(ledStraight, OUTPUT);
+  pinMode(ledRight, OUTPUT);
   pinMode(ldrPin1, INPUT);
   pinMode(ldrPin2, INPUT);
   pinMode(ldrPin3, INPUT);
@@ -21,26 +20,42 @@ void loop() {
   int ldrStatus1 = analogRead(ldrPin1);
   int ldrStatus2 = analogRead(ldrPin2);
   int ldrStatus3 = analogRead(ldrPin3);
+  int directionValue = 0;
 
   //determining if there is something over the LDR
-  if (ldrStatus1 <= 300) {
-    value1 = 1;
-  } else {
+  if (ldrStatus1 <= 350) {
     value1 = 0;
+  } else {
+    value1 = 1;
   }
 
-  if (ldrStatus2 <= 700 ) {
-    value2 = 1;
-  } else {
+  if (ldrStatus2 <= 350) {
     value2 = 0;
-  }
-
-  if (ldrStatus3 <= 650) {
-    value3 = 1;
   } else {
+    value2 = 1;
+  }
+
+  if (ldrStatus3 <= 350) {
     value3 = 0;
+  } else {
+    value3 = 1;
 
   }
+
+  if (value1 == 1) {
+    directionValue++;
+  }
+  if (value3 == 1) {
+    directionValue++;
+  }
+
+  //    //setting up treshholds
+  //    Serial.print("A");
+  //    Serial.println(ldrStatus1);
+  //    Serial.print("B");
+  //    Serial.println(ldrStatus2);
+  //    Serial.print("C");
+  //    Serial.println(ldrStatus3);
 
   //transmitting values
   Serial.print("A");
@@ -49,32 +64,20 @@ void loop() {
   Serial.println(value2);
   Serial.print("C");
   Serial.println(value3);
+  Serial.print("D");
+  Serial.println(directionValue);
 
-  //receiving values and
-  //  if (Serial.available() > 0) {
-  //    int incomingByte = Serial.read();
-  //    if (incomingByte == 2) {
-  //      digitalWrite(ledRed, HIGH);
-  //      digitalWrite(ledYellow, HIGH);
-  //    } else if (incomingByte == 1) {
-  //      digitalWrite(ledRed, HIGH);
-  //      digitalWrite(ledYellow, LOW);
-  //    } else { //when incomingByte == 0
-  //      digitalWrite(ledRed, LOW);
-  //      digitalWrite(ledYellow, HIGH);
-  //    }
-  //  }
-
-
-
+  int junction;
   if (Serial.available() > 0) {
     junction = Serial.read();
+
+    if (junction == 'R') {
+      digitalWrite(ledStraight, LOW);
+      digitalWrite(ledRight, HIGH);
+    }
     if (junction == 'L') {
-      digitalWrite(ledRed, HIGH);
-      digitalWrite(ledYellow, LOW);
-    } if (junction == 'R') {
-      digitalWrite(ledRed, LOW);
-      digitalWrite(ledYellow, HIGH);
+      digitalWrite(ledStraight, HIGH);
+      digitalWrite(ledRight, LOW);
     }
   }
 }
